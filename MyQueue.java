@@ -1,37 +1,53 @@
-import java.util.ArrayList;
+public class MyQueue {
+    private Node first;
+    private Node last;
+    private int size;
 
-public class MyQueue<T> {
-    private ArrayList<T> items;
-
-    public MyQueue() {
-        items = new ArrayList<>();
+    private class Node {
+        Object value;
+        Node next;
     }
 
-    public void add(T item) {
-        items.add(item);
+    public void add(Object value) {
+        Node newNode = new Node();
+        newNode.value = value;
+        if (last != null) {
+            last.next = newNode;
+        }
+        last = newNode;
+        if (first == null) {
+            first = last;
+        }
+        size++;
     }
 
     public void clear() {
-        items.clear();
+        first = null;
+        last = null;
+        size = 0;
     }
 
     public int size() {
-        return items.size();
+        return size;
     }
 
-    public T peek() {
-        if (size() == 0) {
+    public Object peek() {
+        if (first == null) {
             return null;
         }
-        return items.get(0);
+        return first.value;
     }
 
-    public T poll() {
-        if (size() == 0) {
+    public Object poll() {
+        if (first == null) {
             return null;
         }
-        T item = items.get(0);
-        items.remove(0);
-        return item;
+        Object value = first.value;
+        first = first.next;
+        size--;
+        if (first == null) {
+            last = null;
+        }
+        return value;
     }
 }

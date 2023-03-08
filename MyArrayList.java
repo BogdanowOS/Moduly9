@@ -1,35 +1,35 @@
-public class MyArrayList<T> {
-    private T[] data;
+public class MyArrayList {
+
+    private Object[] array;
     private int size;
 
     public MyArrayList() {
-        data = (T[]) new Object[10];
+        array = new Object[10];
         size = 0;
     }
 
-    public void add(T value) {
-        if (size == data.length) {
-            // якщо масив заповнений, збільшуємо його розмір удвічі
-            T[] newData = (T[]) new Object[data.length * 2];
-            System.arraycopy(data, 0, newData, 0, size);
-            data = newData;
+    public void add(Object value) {
+        if (size == array.length) {
+            Object[] newArray = new Object[array.length * 2];
+            System.arraycopy(array, 0, newArray, 0, array.length);
+            array = newArray;
         }
-        data[size++] = value;
+        array[size] = value;
+        size++;
     }
 
     public void remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        System.arraycopy(data, index + 1, data, index, size - index - 1);
+        for (int i = index; i < size - 1; i++) {
+            array[i] = array[i + 1];
+        }
         size--;
-        data[size] = null;
     }
 
     public void clear() {
-        for (int i = 0; i < size; i++) {
-            data[i] = null;
-        }
+        array = new Object[10];
         size = 0;
     }
 
@@ -37,10 +37,10 @@ public class MyArrayList<T> {
         return size;
     }
 
-    public T get(int index) {
+    public Object get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        return data[index];
+        return array[index];
     }
 }

@@ -1,49 +1,57 @@
-public class MyLinkedList<E> {
-    private Node<E> head;
-    private Node<E> tail;
-    private int size;
+public class MyLinkedList {
 
-    private static class Node<E> {
-        E data;
-        Node<E> next;
-        Node<E> prev;
+    private class Node {
+        public Object value;
+        public Node next;
+        public Node prev;
 
-        Node(E element, Node<E> next, Node<E> prev) {
-            this.data = element;
-            this.next = next;
-            this.prev = prev;
+        public Node(Object value) {
+            this.value = value;
         }
     }
 
-    public void add(E element) {
-        Node<E> newNode = new Node<>(element, null, tail);
-        if (tail != null) {
-            tail.next = newNode;
+    private Node head;
+    private Node tail;
+    private int size;
+
+    public MyLinkedList() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    public void add(Object value) {
+        Node node = new Node(value);
+        if (tail == null) {
+            head = node;
+            tail = node;
         } else {
-            head = newNode;
+            node.prev = tail;
+            tail.next = node;
+            tail = node;
         }
-        tail = newNode;
         size++;
     }
 
-    public E remove(int index) {
+    public void remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        Node<E> nodeToRemove;
-        if (index == 0) {
-            nodeToRemove = head;
-            head = head.next;
-        } else if (index == size - 1) {
-            nodeToRemove = tail;
-            tail = tail.prev;
+        Node nodeToRemove = head;
+        for (int i = 0; i < index; i++) {
+            nodeToRemove = nodeToRemove.next;
+        }
+        if (nodeToRemove.prev == null) {
+            head = nodeToRemove.next;
         } else {
-            nodeToRemove = getNode(index);
             nodeToRemove.prev.next = nodeToRemove.next;
+        }
+        if (nodeToRemove.next == null) {
+            tail = nodeToRemove.prev;
+        } else {
             nodeToRemove.next.prev = nodeToRemove.prev;
         }
         size--;
-        return nodeToRemove.data;
     }
 
     public void clear() {
@@ -56,27 +64,14 @@ public class MyLinkedList<E> {
         return size;
     }
 
-    public E get(int index) {
+    public Object get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        Node<E> node = getNode(index);
-        return node.data;
-    }
-
-    private Node<E> getNode(int index) {
-        Node<E> node;
-        if (index < size / 2) {
-            node = head;
-            for (int i = 0; i < index; i++) {
-                node = node.next;
-            }
-        } else {
-            node = tail;
-            for (int i = size - 1; i > index; i--) {
-                node = node.prev;
-            }
+        Node node = head;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
         }
-        return node;
+        return node.value;
     }
 }
